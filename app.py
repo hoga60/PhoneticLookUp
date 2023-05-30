@@ -15,9 +15,6 @@
 
 import os
 import sys
-import requests, json
-import readPhonetic as rp
-import readImage as ri
 from argparse import ArgumentParser
 
 from flask import Flask, request, abort
@@ -28,7 +25,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, ImageSendMessage 
+    MessageEvent, TextMessage, TextSendMessage,
 )
 
 app = Flask(__name__)
@@ -67,39 +64,11 @@ def callback():
             continue
         if not isinstance(event.message, TextMessage):
             continue
-        reply_token = event.reply_token
-        
-        message = []
-        phone = rp.read( event.message.text )
-        image = ri.read( event.message.text )
-        
-        message.append( TextSendMessage( text = phone ) )
-        message.append( ImageSendMessage(
-                    original_content_url = image,
-                    preview_image_url = image) )
-        
-        line_bot_api.reply_message( reply_token, message )
-        
-        """
-        # 一個 reply_token 只能傳送一次訊息, 傳完就作廢
-        # 要傳多個訊息, 請改用 List
-        
-        # 傳送文字訊息
+
         line_bot_api.reply_message(
-            reply_token,
+            event.reply_token,
             TextSendMessage(text=event.message.text)
         )
-        """
-        
-        """
-        # 傳送圖片訊息
-        line_bot_api.reply_message(
-            reply_token,
-            ImageSendMessage(
-                    original_content_url = image,
-                    preview_image_url = image)
-        )
-        """
 
     return 'OK'
 
