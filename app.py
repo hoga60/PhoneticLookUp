@@ -16,6 +16,7 @@
 import os
 import sys
 from argparse import ArgumentParser
+import chat
 
 from flask import Flask, request, abort
 from linebot import (
@@ -33,6 +34,7 @@ app = Flask(__name__)
 # get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
 channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
+openai_key = os.getenv('OPENAI_KEY', None)
 if channel_secret is None:
     print('Specify LINE_CHANNEL_SECRET as environment variable.')
     sys.exit(1)
@@ -65,9 +67,10 @@ def callback():
         if not isinstance(event.message, TextMessage):
             continue
 
+        result = chat.read( openai_key, event.message.text )
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=event.message.text)
+            TextSendMessage(text=result)
         )
 
     return 'OK'
