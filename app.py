@@ -68,7 +68,8 @@ def callback():
         if not isinstance(event.message, TextMessage):
             continue
 
-        result = chat.read( openai_key, event.message.text )
+        # result = chat.read( openai_key, event.message.text )
+        result = 'hi'
         code = '2330'
         image = stock.read( code )
         
