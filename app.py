@@ -26,7 +26,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
+    MessageEvent, TextMessage, TextSendMessage, TextSendMessage
 )
 
 app = Flask(__name__)
@@ -67,10 +67,12 @@ def callback():
         if not isinstance(event.message, TextMessage):
             continue
 
-        result = chat.read( openai_key, event.message.text )
+        image = '2330.png'
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=result)
+            ImageSendMessage(
+                    original_content_url = image,
+                    preview_image_url = image)
         )
 
     return 'OK'
