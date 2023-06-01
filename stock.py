@@ -24,3 +24,4 @@ def read( code ):
 
     plt.xticks( xlabel )
     plt.savefig( code + '.png')
+    return code+'.png'
