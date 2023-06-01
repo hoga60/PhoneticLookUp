@@ -17,7 +17,6 @@ import os
 import sys
 from argparse import ArgumentParser
 import chat
-import stock
 
 from flask import Flask, request, abort
 from linebot import (
@@ -27,7 +26,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, ImageSendMessage
+    MessageEvent, TextMessage, TextSendMessage,
 )
 
 app = Flask(__name__)
@@ -68,19 +67,11 @@ def callback():
         if not isinstance(event.message, TextMessage):
             continue
 
-        # result = chat.read( openai_key, event.message.text )
-        result = 'hi'
-        code = '2330'
-        image = stock.read( code )
-        
-        message = []
-
-        message.append( TextSendMessage( text = result ) )
-        message.append( ImageSendMessage(
-            original_content_url = image,
-            preview_image_url = image ) )
-            
-        line_bot_api.reply_message( event.reply_token, message )
+        result = chat.read( openai_key, event.message.text )
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=result)
+        )
 
     return 'OK'
 
