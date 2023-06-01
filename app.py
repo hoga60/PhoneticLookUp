@@ -67,12 +67,10 @@ def callback():
         if not isinstance(event.message, TextMessage):
             continue
 
-        image = '2330.png'
+        result = chat.read( openai_key, event.message.text )
         line_bot_api.reply_message(
             event.reply_token,
-            ImageSendMessage(
-                    original_content_url = image,
-                    preview_image_url = image)
+            TextSendMessage(text=result)
         )
 
     return 'OK'
